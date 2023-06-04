@@ -3,29 +3,46 @@
 
 
 
-void Circle::malen(QPainter *painter) {
+void Circle::malen(QPainter* objkt) {
 
 
-    painter->setPen(QPen(color,2,Qt::SolidLine));
-    if(innere_mal_frage){
-        painter->setBrush(color);
+    objkt->setPen(QPen(color,2,Qt::SolidLine));
+    //einfach if(innenMAl) erstzen, wurde dann nciht wegen color mode innen gemalt
+
+    if(innenMAl || mussGemalt){
+        objkt->setBrush(color);
     } else{
-        painter->setBrush(Qt::NoBrush);
+        objkt->setBrush(Qt::NoBrush);
     }
 
-    painter->drawEllipse(firstPunkt, radius,radius);
-
-}
-void Circle::addPunkt(QPoint punkt_){
+    objkt->drawEllipse(getFirstPunkt(), rad,rad);
 
 }
 
 
+void Circle::setColor(QColor color_) {
+    color = color_;
+    mussGemalt = true;
+}
 
-bool Circle::isKlein() {
-
+void Circle::addPunkt(QPoint punkt) {
+    //some code
+}
+void Circle::remov(QPoint startP, QPoint endeeP) {
+    //some code
+}
+bool Circle::isSmall() {
     return (abs(firstPunkt.rx() - lastPunkt.rx()) + abs(firstPunkt.ry()-lastPunkt.ry())) <2;
 
 }
+
+
+bool Circle::insideTest(QPoint punkt){
+    float dx = punkt.x() - firstPunkt.x();
+    float dy = punkt.y() - firstPunkt.y();
+    float distance = std::sqrt(std::pow(dx, 2) + std::pow(dy, 2));
+    return distance <= rad;
+}
+
 
 

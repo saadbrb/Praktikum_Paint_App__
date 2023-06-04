@@ -13,22 +13,40 @@ Canvas::Canvas(QWidget *parent)
 
     type = NONE;
     dragging = false;
-    innereFrage = true;
-    tmprGraphOb_ = nullptr;
+    innenFrage = true;
+    objkt = nullptr;
+    createRadioButtons();
+
 
 }
+void Canvas::createRadioButtons()
+{
+    buttonGroup = new QButtonGroup(this);
+    groupBox = new QGroupBox(tr("Interaction Mode"));
 
+    QRadioButton *creatButton = new QRadioButton(tr("Creat"));
+    QRadioButton *delButton = new QRadioButton(tr("Del"));
+    QRadioButton *colButton = new QRadioButton(tr("Col"));
+    QRadioButton *trafoButton = new QRadioButton(tr("Trafo"));
+
+    buttonGroup->addButton(creatButton, CREAT);
+    buttonGroup->addButton(delButton, DEL);
+    buttonGroup->addButton(colButton, COL);
+    buttonGroup->addButton(trafoButton, TRAFO);
+
+    QVBoxLayout *vbox = new QVBoxLayout;
+    vbox->addWidget(creatButton);
+    vbox->addWidget(delButton);
+    vbox->addWidget(colButton);
+    vbox->addWidget(trafoButton);
+    vbox->addStretch(1);
+    groupBox->setLayout(vbox);
+
+    connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(interactionModeChanged(int)));
+}
 Canvas::~Canvas()
 {
 }
-void Canvas::setInnerFrage(bool frage){
-    if(frage){
-        innereFrage = true;
-    } else {
-        innereFrage = false;
-    }
-}
-
 
 QSize Canvas::minimumSizeHint() const
 {
@@ -39,24 +57,58 @@ QSize Canvas::sizeHint() const
 {
     return QSize(640, 480);
 }
+void Canvas::setInnenFrage(bool frage){
+    innenFrage = frage;
+}
+
 
 void Canvas::clearCanvas()
 {
-    scene.deletAllEllement();
+    scene.deleteAllObjkts();
 }
 
 void Canvas::setPrimitiveMode(int mode)
 {
     type = (Canvas::PrimitiveMode)mode;
-    if(type == FREE_HAND){
-        tmprGraphOb_ = new  class Polyline(color);
+    if(type == FREE_HAND && mode == CREAT) {
+        objkt = new  class Polyline(color);
     }
 
 }
-void Canvas::setFarbe(QColor color_){
+
+void Canvas::setInteractionMode(int mode_){
+    mode = (Canvas::InteractionMode) mode_;
+}
+
+void Canvas::setColor(QColor color_)
+{
 
     color = color_;
 }
+
+void Canvas::interactionModeChanged(int id)
+{
+    // Wechseln Sie den Interaktionsmodus entsprechend der Auswahl des Benutzers
+    switch(id) {
+        case CREAT:
+            // Code für den Erstellungsmodus
+            setPrimitiveMode(CREAT);
+            break;
+        case DEL:
+            // Code für den Löschmodus
+            setPrimitiveMode(DEL);
+            break;
+        case COL:
+            // Code für den Farbänderungsmodus
+            setPrimitiveMode(COL);
+            break;
+        case TRAFO:
+            // Code für den Transformationsmodus
+            setPrimitiveMode(TRAFO);
+            break;
+    }
+}
+
 
 void Canvas::paintEvent(QPaintEvent *event)
 {
@@ -66,53 +118,61 @@ void Canvas::paintEvent(QPaintEvent *event)
 
     // white background (inside parent's border)
     painter.fillRect(QRect(1, 1, width() - 2, height() - 2), Qt::white);
-    scene.displayAllEllement(&painter);
+    scene.alleMalne(&painter);
 
-
+    if( mode == CREAT){
     if(dragging){
-        if(type == CIRCLE){
+        if(type == FREE_HAND){
 
-            tmprGraphOb_ = new Circle(color, firstPunkt, lastPunkt, innereFrage);
-            if(!tmprGraphOb_->isKlein()){
-                tmprGraphOb_->malen(&painter);
-            }
-        }
-        else if (type == RECTANGLE) {
-
-            tmprGraphOb_ = new class Rectangle(color, firstPunkt, lastPunkt, innereFrage);
-            if(!tmprGraphOb_->isKlein()){
-                tmprGraphOb_->malen(&painter);
-            }
-        }
-        else if (type == FREE_HAND) {
-            tmprGraphOb_->addPunkt(lastPunkt);
-            tmprGraphOb_->malen(&painter);
-
+            objkt->addPunkt(lastPunkt);
+            objkt->malen(&painter);
 
         }
-        else if (type == LINE) {
-
-            tmprGraphOb_ = new Line(color, firstPunkt, lastPunkt);
-            if(!tmprGraphOb_->isKlein()){
-                tmprGraphOb_->malen(&painter);
+        else if(type == CIRCLE){
+            objkt = new Circle(color, innenFrage, firstPunkt, lastPunkt);
+            objkt->malen(&painter);
+            if(!objkt->isSmall()){
+                objkt->malen(&painter);
             }
-
-
+        }
+        else if(type == RECTANGLE){
+            objkt = new class Rectangle(color, innenFrage, firstPunkt, lastPunkt);
+            if(!objkt->isSmall()){
+                objkt->malen(&painter);
+            }
+        }
+        else if(type == LINE){
+            objkt = new Line(color, firstPunkt, lastPunkt);
+            if(!objkt->isSmall()){
+                objkt->malen(&painter);
+            }
         }
 
 
     }
-
-    if(!dragging && tmprGraphOb_!=nullptr){
-        if(!tmprGraphOb_->isKlein()){
-            tmprGraphOb_->malen(&painter);
-            scene.addElement(tmprGraphOb_);
-
-            tmprGraphOb_ = nullptr;
-
+    if(!dragging && objkt != nullptr ){
+        if(!objkt->isSmall()){
+            objkt->malen(&painter);
+            scene.addObjkt(objkt);
         }
+        objkt = nullptr;
         painter.end();
     }
+    }
+    else if ( mode == COL) {
+        if(checkPress == 1){
+
+        scene.setInnenColor(innenTestPunkt,color);
+        }
+    }
+
+    else if ( mode == DEL) {
+        if(checkPress == 1){
+
+        scene.deleteItem(innenTestPunkt);
+        }
+    }
+
 
 
 }
@@ -144,9 +204,11 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         //QPoint currPos = event->pos();
 
         if(type == FREE_HAND){
-            tmprGraphOb_ = new  class Polyline(color);
+            objkt = new  class Polyline(color);
         }
         firstPunkt = event->pos();
+        innenTestPunkt = firstPunkt;
+        checkPress = 1;
         lastPunkt = firstPunkt;
         update();
     }
@@ -157,6 +219,7 @@ void Canvas::mouseMoveEvent(QMouseEvent *event)
     if ((event->buttons() & Qt::LeftButton) && dragging) {
 
         lastPunkt = event->pos();
+        //checkPress = 0;
 
         update();
     }
@@ -170,8 +233,11 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event)
         // TODO
 
         lastPunkt = event->pos();
+        checkPress = 0;
+
 
         update();
     }
+
 }
 

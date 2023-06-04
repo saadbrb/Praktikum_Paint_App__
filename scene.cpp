@@ -1,25 +1,68 @@
 #include "scene.h"
 
+void Scene::addObjkt(GraphObj* objkt){
+    objketen.push_back(objkt);
+    std::cout<<"Objekt wurde erfolgreich reingefuegt!\n";
+    QPoint a;
+    a=objkt->getFirstPunkt();
+    QPoint b;
+    b=objkt->getLastPunkt();
+    std::cout<<"Sein firstpunkt x ist : "<<a.rx()<<" und y ist : "<<a.ry() <<"\n";
 
-void Scene::displayAllEllement(QPainter *painter){
-    for(size_t i=0; i<graphObjekten.size(); i++){
-        graphObjekten[i]->malen(painter);
-    }
+    std::cout<<"Sein lastpunkt x ist : "<<b.rx()<<" und y ist : "<<b.ry() <<"\n";
 }
-void Scene::deletAllEllement(){
-    if (!graphObjekten.empty()) {
-        for (auto element : graphObjekten) {
-            delete element;
+
+void Scene::deleteItem(QPoint punkt){
+    if(objketen.size() > 0){
+        for(auto it = objketen.begin(); it != objketen.end();){
+            if((*it)->insideTest(punkt)){
+                it = objketen.erase(it);
+            } else {
+                ++it;
+            }
         }
-        graphObjekten.clear();
-    } else {
-        std::cout << "No Elements to delete!\n";
+    }
+
+    else {
+        std::cout<<"Box leer!\n";
     }
 
 }
-void Scene::addElement(GraphObj* objkt_){
-    graphObjekten.push_back(objkt_);
 
-    std::cout<<"New Ellement ist hinzugefuegt!\n";
-    std::cout<<"Size ist: "<<graphObjekten.size()<<"\n";
+
+
+
+void Scene::setInnenColor(QPoint punkt, QColor color){
+    if(objketen.size() > 0){
+        for(size_t i=0; i<objketen.size(); i++){
+            if(objketen[i]->insideTest(punkt)){
+                objketen[i]->setColor(color);
+            }
+        }
+    }
+    else {
+        std::cout<<"Box leer!\n";
+    }
+
+}
+
+void Scene::alleMalne(QPainter* objkt){
+    if(objketen.size() > 0){
+        for(size_t i=0; i<objketen.size(); i++){
+            objketen[i]->malen(objkt);
+        }
+
+    }
+
+}
+void Scene::deleteAllObjkts(){
+    if(objketen.size() > 0){
+        for(size_t i=0; i<objketen.size(); i++){
+            delete objketen[i];
+        }
+        objketen.clear();
+    }
+    else {
+        std::cout<<"Es gibt keine Element zum Löschen!\n";
+    }
 }

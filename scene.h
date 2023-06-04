@@ -11,22 +11,22 @@ class GraphObj;
 
 class Scene {
 private:
-    std::vector<GraphObj*> graphObjekten;
+    std::vector<GraphObj*> objketen;
 
 public:
-    Scene(){
+    void addObjkt(GraphObj* objkt);
+    void alleMalne(QPainter* objkt);
+    void deleteAllObjkts();
+    void setInnenColor(QPoint punkt, QColor color);
+    void deleteItem(QPoint punkt);
+    ~ Scene(){
+        if(objketen.size() > 0)
+            for(size_t i=0; i<objketen.size(); i++){
+                delete objketen[i];
+            }
 
     }
 
-    void displayAllEllement(QPainter *painter);
-    void deletAllEllement();
-    void addElement(GraphObj* objkt_);
-    ~Scene(){
-        for(GraphObj* A : graphObjekten){
-            delete A;
-        }
-
-    }
 };
 
 #endif // SCENE_H

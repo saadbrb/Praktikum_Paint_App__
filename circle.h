@@ -6,24 +6,23 @@
 
 class Circle : public GraphObj {
 private:
-    int radius;
+    int rad;
+
 
 public:
-    Circle(QColor color_, QPoint firstPunkt_, QPoint lastPunkt_, bool innere_mal_frage_):
-        GraphObj(color_, firstPunkt_, lastPunkt_, innere_mal_frage_){
-
-        double a= abs(firstPunkt_.rx()-lastPunkt_.rx());
-        double b = abs(firstPunkt_.ry()-lastPunkt_.ry());
+    Circle(QColor color_, bool innenMAl_, QPoint firstPunkt_, QPoint lastPunkt_):
+        GraphObj(color_, innenMAl_, firstPunkt_, lastPunkt_){
+        double a= abs(getFirstPunkt().rx()-getLastPunkt().rx());
+        double b = abs(getFirstPunkt().ry()-getLastPunkt().ry());
         double c = sqrt(a*a + b*b);
-        radius = (int) c;
+        rad = (int) c;
     }
-
-
-    void malen(QPainter *painter) override;
-
-    bool isKlein() override;
-
-    void addPunkt(QPoint punkt_) override;
+    void malen(QPainter* objkt) override ;
+    void addPunkt(QPoint punkt) override;
+    void remov(QPoint startP, QPoint endeeP) override;
+    bool isSmall() override;
+    bool insideTest(QPoint punkt) override;
+    void setColor(QColor color_) override;
 
 
 

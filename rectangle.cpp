@@ -3,25 +3,49 @@
 
 
 
-void Rectangle::malen(QPainter *painter) {
+void Rectangle::malen(QPainter* objkt) {
 
-
-    painter->setPen(QPen(color,2,Qt::SolidLine));
-    if(innere_mal_frage){
-        painter->setBrush(color);
+    objkt->setPen(QPen(color,2,Qt::SolidLine));
+    //einfach if(innenMAl) erstzen, wurde dann nciht wegen color mode innen gemalt
+    if(innenMAl || mussGemalt){
+        objkt->setBrush(color);
     } else{
-        painter->setBrush(Qt::NoBrush);
+        objkt->setBrush(Qt::NoBrush);
     }
-    painter->drawRect(x,y,width,height);
+    objkt->drawRect(x,y,with,height);
+
 
 
 }
 
-bool Rectangle::isKlein() {
+void Rectangle::setColor(QColor color_) {
+    color = color_;
+    mussGemalt = true;
 
+}
+void Rectangle::addPunkt(QPoint punkt) {
+    //some code
+}
+void Rectangle::remov(QPoint startP, QPoint endeeP) {
+    //some code
+}
+bool Rectangle::isSmall() {
     return (abs(firstPunkt.rx() - lastPunkt.rx()) + abs(firstPunkt.ry()-lastPunkt.ry())) <2;
 
 }
-void Rectangle::addPunkt(QPoint punkt_){
+bool Rectangle::insideTest(QPoint punkt){
 
+    QPoint max;
+    QPoint min;
+
+    if(firstPunkt.ry() >= lastPunkt.ry()){
+        max = firstPunkt;
+        min = lastPunkt;
+    }
+    else if (lastPunkt.ry() >= firstPunkt.ry() ) {
+        max = lastPunkt;
+        min = firstPunkt;
+    }
+    return min.rx() <= punkt.rx() && min.y() <= punkt.ry() &&
+            punkt.rx() <= max.rx() && punkt.ry() <= max.ry();
 }

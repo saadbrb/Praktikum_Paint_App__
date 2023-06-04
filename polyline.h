@@ -9,17 +9,19 @@
 class Polyline: public GraphObj
 {
 private:
-    QVector<QPoint>punkten;
+    QVector <QPoint> punkten;
 
 public:
-    Polyline(QColor color_): GraphObj(color_){
+    Polyline(QColor color): GraphObj(color){
 
     }
+    void malen(QPainter* objkt) override ;
     void addPunkt(QPoint punkt) override;
-    void malen(QPainter *painter) override;
+    void remov(QPoint startP, QPoint endeeP) override;
+    bool isSmall() override;
+    bool insideTest(QPoint punkt) override;
+    void setColor(QColor color_) override;
 
-
-    bool isKlein() override;
 
 
 };

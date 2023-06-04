@@ -6,32 +6,41 @@
 #include <QPainterPath>
 class GraphObj {
 
-public:
+protected:
     QColor color;
+    bool innenMAl;
     QPoint firstPunkt;
     QPoint lastPunkt;
-    bool innere_mal_frage;
-
+    bool mussGemalt = false;
 
 
 public:
-    GraphObj();
+    GraphObj(QColor color_, bool innenMAl_, QPoint firstPunkt_, QPoint lastPunkt_):
+        color(color_), innenMAl(innenMAl_), firstPunkt(firstPunkt_), lastPunkt(lastPunkt_)  {
 
-    GraphObj(QColor color_, QPoint firstPunkt_, QPoint lastPunkt_, bool innere_mal_frage_): color(color_),
-        firstPunkt(firstPunkt_), lastPunkt(lastPunkt_), innere_mal_frage(innere_mal_frage_){}
+    }
+    GraphObj(QColor color_, QPoint firstPunkt_, QPoint lastPunkt_):
+        color(color_), firstPunkt(firstPunkt_), lastPunkt(lastPunkt_) {
 
-    GraphObj(QColor color_, QPoint firstPunkt_, QPoint lastPunkt_): color(color_),
-        firstPunkt(firstPunkt_), lastPunkt(lastPunkt_){}
+    }
+    GraphObj(QColor color_):
+        color(color_) {
 
-    GraphObj(QColor color_): color(color_){}
+    }
+    // Verbieten den Kopierkonstruktor und den Zuweisungsoperator
+    GraphObj(const GraphObj&) = delete;
+    GraphObj& operator=(const GraphObj&) = delete;
+    virtual void malen(QPainter* objkt) = 0 ;
+    virtual void addPunkt(QPoint punkt) = 0;
+    virtual void remov(QPoint startP, QPoint endeeP) = 0;
+    virtual bool isSmall() = 0;
+    virtual bool insideTest(QPoint punkt) = 0;
+    virtual void setColor(QColor color_) = 0;
+    QPoint getFirstPunkt();
+    QPoint getLastPunkt();
+    QColor getColor();
+    void setMussGemalt(bool);
 
-    virtual void addPunkt(QPoint punkt_) = 0;
-
-    virtual void malen(QPainter *painter) = 0;
-
-    virtual bool isKlein() = 0;
-
-    virtual ~GraphObj(){}
 
 
 

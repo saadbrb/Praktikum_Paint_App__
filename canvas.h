@@ -8,6 +8,11 @@
 #include "circle.h"
 #include "line.h"
 #include "polyline.h"
+#include <QFrame>
+#include <QButtonGroup>
+#include <QGroupBox>
+#include <QRadioButton>
+#include <QVBoxLayout>
 #include "graphobj.h"
 
 class Canvas : public QFrame
@@ -19,6 +24,8 @@ public:
         NONE, FREE_HAND, CIRCLE, LINE, TRIANGLE, RECTANGLE, POLYGON
     };
 
+    enum InteractionMode { CREAT, DEL, COL, TRAFO }; // Hier ist die Aufzählung
+
     Canvas(QWidget *parent = 0);
     ~Canvas();
 
@@ -27,8 +34,13 @@ public:
 
     void clearCanvas();
     void setPrimitiveMode(int mode);
-    void setInnerFrage(bool farge);
-    void setFarbe(QColor color_);
+    void setColor(QColor color_);
+    void createRadioButtons();
+
+    void setInnenFrage(bool frage);
+    void interactionModeChanged(int id);
+    void setInteractionMode(int mode_);
+
 
 protected:
     void paintEvent(QPaintEvent *event);
@@ -38,15 +50,23 @@ protected:
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
 
+
 private:
     bool dragging;
     PrimitiveMode type;
     QColor color;
     QPoint firstPunkt;
     QPoint lastPunkt;
-    bool innereFrage;
+    bool innenFrage;
     Scene scene;
-    GraphObj* tmprGraphOb_;
+    GraphObj* objkt;
+    QButtonGroup *buttonGroup;
+    QGroupBox *groupBox;
+    InteractionMode mode;
+    QPoint innenTestPunkt;
+    int checkPress = 0;
+
+
 };
 
 

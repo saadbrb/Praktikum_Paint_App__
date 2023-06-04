@@ -1,4 +1,4 @@
-#include <QPushButton> 
+#include <QPushButton>
 #include <QComboBox>
 #include <QLabel>
 #include <QColorDialog>
@@ -7,6 +7,8 @@
 #include <QDebug>
 #include "paint.h"
 #include "canvas.h"
+
+enum InteractionMode { CREAT, DEL, COL, TRAFO };
 
 /** c'tor */
 Paint::Paint(QWidget *parent)
@@ -29,8 +31,8 @@ Paint::Paint(QWidget *parent)
     lblPrimModes = new QLabel("Primitive Mode");
     lblPrimModes->setBuddy(cobPrimModes);
 
-    btnDeleteObj = new QPushButton("&Delete Selected");
-    btnDeleteObj->setDisabled(true);
+//    btnDeleteObj = new QPushButton("&Delete Selected");
+//    btnDeleteObj->setDisabled(true);
     btnChangeCol = new QPushButton("C&hange Color");
 
     cbOutline = new QCheckBox("Show Only &Outline", this);
@@ -64,6 +66,35 @@ Paint::Paint(QWidget *parent)
     // connect checkbox to toggle outline event handler
     connect(cbOutline, SIGNAL(toggled(bool)),
             this, SLOT(showOutlineOnly(bool)));
+
+
+    // Create a QGroupBox for the radio buttons
+    QGroupBox *groupBox = new QGroupBox("Interaction Modes");
+    QVBoxLayout *vbox = new QVBoxLayout;
+
+    QRadioButton *button1 = new QRadioButton("Create");
+    QRadioButton *button2 = new QRadioButton("Delete");
+    QRadioButton *button3 = new QRadioButton("Color");
+    QRadioButton *button4 = new QRadioButton("Transform");
+
+    vbox->addWidget(button1);
+    vbox->addWidget(button2);
+    vbox->addWidget(button3);
+    vbox->addWidget(button4);
+
+    groupBox->setLayout(vbox);
+
+    QButtonGroup *buttonGroup = new QButtonGroup;
+    buttonGroup->addButton(button1, CREAT);
+    buttonGroup->addButton(button2, DEL);
+    buttonGroup->addButton(button3, COL);
+    buttonGroup->addButton(button4, TRAFO);
+
+    QObject::connect(buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked),
+                        [this](int id){ this->viewport->setInteractionMode(id); });
+
+    // Add the group box to the layout
+    mainLayout->addWidget(groupBox, 3, 0, 1, 4);
 }
 
 /** d'tor */
@@ -93,7 +124,7 @@ void Paint::colorBtnPressed()
     if (color.isValid()) {
         qDebug() << "Color Choosen : " << color.name();
         //viewport->setObjColor(color);
-        viewport->setFarbe(color);
+        viewport->setColor(color);
     }
 }
 
@@ -101,7 +132,7 @@ void Paint::showOutlineOnly(bool outline)
 {
     qDebug() << "Only show outline: " << outline;
     //viewport->setFillMode(!outline);
-    viewport->setInnerFrage(!outline);
+    viewport->setInnenFrage(!outline);
 }
 
 void Paint::primModeChanged()
