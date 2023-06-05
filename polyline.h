@@ -17,7 +17,7 @@ public:
     }
     void malen(QPainter* objkt) override ;
     void addPunkt(QPoint punkt) override;
-    void remov(QPoint startP, QPoint endeeP) override;
+    void remov(QPoint startP) override;
     bool isSmall() override;
     bool insideTest(QPoint punkt) override;
     void setColor(QColor color_) override;

@@ -19,6 +19,8 @@ public:
     void deleteAllObjkts();
     void setInnenColor(QPoint punkt, QColor color);
     void deleteItem(QPoint punkt);
+    int isSelectes(QPoint punkt);
+    void setPosition(QPoint punkt, int i);
     ~ Scene(){
         if(objketen.size() > 0)
             for(size_t i=0; i<objketen.size(); i++){

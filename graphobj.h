@@ -32,7 +32,7 @@ public:
     GraphObj& operator=(const GraphObj&) = delete;
     virtual void malen(QPainter* objkt) = 0 ;
     virtual void addPunkt(QPoint punkt) = 0;
-    virtual void remov(QPoint startP, QPoint endeeP) = 0;
+    virtual void remov(QPoint startP) = 0;
     virtual bool isSmall() = 0;
     virtual bool insideTest(QPoint punkt) = 0;
     virtual void setColor(QColor color_) = 0;

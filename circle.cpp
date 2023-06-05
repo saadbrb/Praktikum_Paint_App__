@@ -5,6 +5,10 @@
 
 void Circle::malen(QPainter* objkt) {
 
+    double a= abs(getFirstPunkt().rx()-getLastPunkt().rx());
+    double b = abs(getFirstPunkt().ry()-getLastPunkt().ry());
+    double c = sqrt(a*a + b*b);
+    rad = (int) c;
 
     objkt->setPen(QPen(color,2,Qt::SolidLine));
     //einfach if(innenMAl) erstzen, wurde dann nciht wegen color mode innen gemalt
@@ -26,10 +30,19 @@ void Circle::setColor(QColor color_) {
 }
 
 void Circle::addPunkt(QPoint punkt) {
-    //some code
+
 }
-void Circle::remov(QPoint startP, QPoint endeeP) {
-    //some code
+void Circle::remov(QPoint punkt) {
+
+    QPoint tpr;
+    tpr.setX(punkt.rx() - firstPunkt.rx());
+    tpr.setY(punkt.ry() - firstPunkt.ry());
+
+
+    firstPunkt.setX(firstPunkt.rx() + tpr.rx());
+    firstPunkt.setY(firstPunkt.ry() + tpr.ry());
+    lastPunkt.setX(lastPunkt.rx() + tpr.rx());
+    lastPunkt.setY(lastPunkt.ry() + tpr.ry());
 }
 bool Circle::isSmall() {
     return (abs(firstPunkt.rx() - lastPunkt.rx()) + abs(firstPunkt.ry()-lastPunkt.ry())) <2;

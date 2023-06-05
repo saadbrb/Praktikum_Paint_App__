@@ -15,8 +15,16 @@ void Line::setColor(QColor color_) {
 void Line::addPunkt(QPoint punkt) {
     //some code
 }
-void Line::remov(QPoint startP, QPoint endeeP) {
-    //some code
+void Line::remov(QPoint punkt) {
+    QPoint tpr;
+    tpr.setX(punkt.rx() - firstPunkt.rx());
+    tpr.setY(punkt.ry() - firstPunkt.ry());
+
+
+    firstPunkt.setX(firstPunkt.rx() + tpr.rx());
+    firstPunkt.setY(firstPunkt.ry() + tpr.ry());
+    lastPunkt.setX(lastPunkt.rx() + tpr.rx());
+    lastPunkt.setY(lastPunkt.ry() + tpr.ry());
 }
 bool Line::isSmall() {
     return (abs(firstPunkt.rx() - lastPunkt.rx()) + abs(firstPunkt.ry()-lastPunkt.ry())) <2;

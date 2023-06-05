@@ -4,6 +4,10 @@
 
 
 void Rectangle::malen(QPainter* objkt) {
+    x = firstPunkt.rx();
+    y = firstPunkt.ry();
+    with = lastPunkt.rx()-firstPunkt.rx();
+    height =lastPunkt.ry()-firstPunkt.ry();
 
     objkt->setPen(QPen(color,2,Qt::SolidLine));
     //einfach if(innenMAl) erstzen, wurde dann nciht wegen color mode innen gemalt
@@ -26,8 +30,16 @@ void Rectangle::setColor(QColor color_) {
 void Rectangle::addPunkt(QPoint punkt) {
     //some code
 }
-void Rectangle::remov(QPoint startP, QPoint endeeP) {
-    //some code
+void Rectangle::remov(QPoint punkt) {
+    QPoint tpr;
+    tpr.setX(punkt.rx() - firstPunkt.rx());
+    tpr.setY(punkt.ry() - firstPunkt.ry());
+
+
+    firstPunkt.setX(firstPunkt.rx() + tpr.rx());
+    firstPunkt.setY(firstPunkt.ry() + tpr.ry());
+    lastPunkt.setX(lastPunkt.rx() + tpr.rx());
+    lastPunkt.setY(lastPunkt.ry() + tpr.ry());
 }
 bool Rectangle::isSmall() {
     return (abs(firstPunkt.rx() - lastPunkt.rx()) + abs(firstPunkt.ry()-lastPunkt.ry())) <2;

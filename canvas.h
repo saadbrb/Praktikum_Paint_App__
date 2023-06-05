@@ -64,7 +64,10 @@ private:
     QGroupBox *groupBox;
     InteractionMode mode;
     QPoint innenTestPunkt;
-    int checkPress = 0;
+    int checkPress =0;
+    QPoint tPunkt;
+    bool selected = false;
+    int i = -1;
 
 
 };

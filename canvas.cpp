@@ -90,22 +90,22 @@ void Canvas::interactionModeChanged(int id)
 {
     // Wechseln Sie den Interaktionsmodus entsprechend der Auswahl des Benutzers
     switch(id) {
-        case CREAT:
-            // Code für den Erstellungsmodus
-            setPrimitiveMode(CREAT);
-            break;
-        case DEL:
-            // Code für den Löschmodus
-            setPrimitiveMode(DEL);
-            break;
-        case COL:
-            // Code für den Farbänderungsmodus
-            setPrimitiveMode(COL);
-            break;
-        case TRAFO:
-            // Code für den Transformationsmodus
-            setPrimitiveMode(TRAFO);
-            break;
+    case CREAT:
+        // Code für den Erstellungsmodus
+        setPrimitiveMode(CREAT);
+        break;
+    case DEL:
+        // Code für den Löschmodus
+        setPrimitiveMode(DEL);
+        break;
+    case COL:
+        // Code für den Farbänderungsmodus
+        setPrimitiveMode(COL);
+        break;
+    case TRAFO:
+        // Code für den Transformationsmodus
+        setPrimitiveMode(TRAFO);
+        break;
     }
 }
 
@@ -121,58 +121,73 @@ void Canvas::paintEvent(QPaintEvent *event)
     scene.alleMalne(&painter);
 
     if( mode == CREAT){
-    if(dragging){
-        if(type == FREE_HAND){
+        if(dragging){
+            if(type == FREE_HAND){
 
-            objkt->addPunkt(lastPunkt);
-            objkt->malen(&painter);
+                objkt->addPunkt(lastPunkt);
+                objkt->malen(&painter);
+
+            }
+            else if(type == CIRCLE){
+                objkt = new Circle(color, innenFrage, firstPunkt, lastPunkt);
+                objkt->malen(&painter);
+                if(!objkt->isSmall()){
+                    objkt->malen(&painter);
+                }
+            }
+            else if(type == RECTANGLE){
+                objkt = new class Rectangle(color, innenFrage, firstPunkt, lastPunkt);
+                if(!objkt->isSmall()){
+                    objkt->malen(&painter);
+                }
+            }
+            else if(type == LINE){
+                objkt = new Line(color, firstPunkt, lastPunkt);
+                if(!objkt->isSmall()){
+                    objkt->malen(&painter);
+                }
+            }
+
 
         }
-        else if(type == CIRCLE){
-            objkt = new Circle(color, innenFrage, firstPunkt, lastPunkt);
-            objkt->malen(&painter);
+        if(!dragging && objkt != nullptr ){
             if(!objkt->isSmall()){
                 objkt->malen(&painter);
+                scene.addObjkt(objkt);
             }
+            objkt = nullptr;
+            painter.end();
         }
-        else if(type == RECTANGLE){
-            objkt = new class Rectangle(color, innenFrage, firstPunkt, lastPunkt);
-            if(!objkt->isSmall()){
-                objkt->malen(&painter);
-            }
-        }
-        else if(type == LINE){
-            objkt = new Line(color, firstPunkt, lastPunkt);
-            if(!objkt->isSmall()){
-                objkt->malen(&painter);
-            }
-        }
-
-
-    }
-    if(!dragging && objkt != nullptr ){
-        if(!objkt->isSmall()){
-            objkt->malen(&painter);
-            scene.addObjkt(objkt);
-        }
-        objkt = nullptr;
-        painter.end();
-    }
     }
     else if ( mode == COL) {
         if(checkPress == 1){
 
-        scene.setInnenColor(innenTestPunkt,color);
+            scene.setInnenColor(innenTestPunkt,color);
         }
     }
 
     else if ( mode == DEL) {
         if(checkPress == 1){
 
-        scene.deleteItem(innenTestPunkt);
+            scene.deleteItem(innenTestPunkt);
         }
     }
 
+    else if ( mode == TRAFO) {
+        if(checkPress == 1 && i == -1){
+
+
+            i = scene.isSelectes(innenTestPunkt);
+
+        }
+        if (i != -1 && dragging){
+            scene.setPosition(tPunkt, i);
+        }
+        else if (i != -1 && !dragging) {
+            scene.setPosition(tPunkt, i);
+            i = -1;
+        }
+    }
 
 
 }
@@ -210,6 +225,7 @@ void Canvas::mousePressEvent(QMouseEvent *event)
         innenTestPunkt = firstPunkt;
         checkPress = 1;
         lastPunkt = firstPunkt;
+
         update();
     }
 }
@@ -219,7 +235,9 @@ void Canvas::mouseMoveEvent(QMouseEvent *event)
     if ((event->buttons() & Qt::LeftButton) && dragging) {
 
         lastPunkt = event->pos();
+        tPunkt = event->pos();
         //checkPress = 0;
+
 
         update();
     }
@@ -233,6 +251,8 @@ void Canvas::mouseReleaseEvent(QMouseEvent *event)
         // TODO
 
         lastPunkt = event->pos();
+        tPunkt = event->pos();
+
         checkPress = 0;
 
 

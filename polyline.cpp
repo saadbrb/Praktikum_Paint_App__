@@ -2,6 +2,7 @@
 #include<cmath>
 
 void Polyline::malen(QPainter* objkt) {
+
     objkt->setPen(QPen(color,2,Qt::SolidLine));
     objkt->drawPolyline(punkten);
 
@@ -14,10 +15,23 @@ void Polyline::setColor(QColor color_) {
 
 }
 void Polyline::addPunkt(QPoint punkt) {
+    if(punkten.size() == 1){
+        firstPunkt = punkt;
+    }
     punkten.push_back(punkt);
 }
-void Polyline::remov(QPoint startP, QPoint endeeP) {
-    //some code
+void Polyline::remov(QPoint newLocation) {
+    QPoint offset;
+    offset.setX(newLocation.rx() - firstPunkt.rx());
+    offset.setY(newLocation.ry() - firstPunkt.ry());
+
+    for(size_t i=0; i < punkten.size(); i++){
+        punkten[i].setX(punkten[i].rx() + offset.rx());
+        punkten[i].setY(punkten[i].ry() + offset.ry());
+    }
+
+    // Aktualisieren Sie firstPunkt zur neuen Position
+    firstPunkt = newLocation;
 }
 bool Polyline::isSmall() {
 

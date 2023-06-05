@@ -29,6 +29,29 @@ void Scene::deleteItem(QPoint punkt){
 
 }
 
+void Scene::setPosition(QPoint punkt, int i){
+
+
+    objketen[i]->remov(punkt);
+
+}
+
+int Scene::isSelectes(QPoint punkt){
+    if(objketen.size() > 0){
+        for(size_t i=0; i<objketen.size(); i++){
+            if(objketen[i]->insideTest(punkt)){
+                return i;
+            }
+        }
+        return -1;
+    }
+    else {
+        std::cout<<"Box leer!\n";
+        return -1;
+    }
+}
+
+
 
 
 
