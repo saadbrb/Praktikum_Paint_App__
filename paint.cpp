@@ -25,14 +25,14 @@ Paint::Paint(QWidget *parent)
     cobPrimModes->addItem(tr("Freehand"), Canvas::FREE_HAND);
     cobPrimModes->addItem(tr("Circle"), Canvas::CIRCLE);
     cobPrimModes->addItem(tr("Rectangle"), Canvas::RECTANGLE);
-    //cobPrimModes->addItem(tr("Triangle"), Canvas::TRIANGLE);
     cobPrimModes->addItem(tr("Polygon"), Canvas::POLYGON);
+    cobPrimModes->addItem(tr("Triangle"), Canvas::TRIANGLE);
 
     lblPrimModes = new QLabel("Primitive Mode");
     lblPrimModes->setBuddy(cobPrimModes);
 
-//    btnDeleteObj = new QPushButton("&Delete Selected");
-//    btnDeleteObj->setDisabled(true);
+    //    btnDeleteObj = new QPushButton("&Delete Selected");
+    //    btnDeleteObj->setDisabled(true);
     btnChangeCol = new QPushButton("C&hange Color");
 
     cbOutline = new QCheckBox("Show Only &Outline", this);
@@ -41,12 +41,13 @@ Paint::Paint(QWidget *parent)
     QGridLayout *mainLayout = new QGridLayout;
 
     mainLayout->addWidget(viewport,       0, 0, 1, 4);
-    mainLayout->addWidget(btnChangeCol,   1, 0);
-    mainLayout->addWidget(cbOutline,      1, 1, Qt::AlignLeft);
-    mainLayout->addWidget(lblPrimModes,   1, 2, Qt::AlignRight);
-    mainLayout->addWidget(cobPrimModes,   1, 3);
-    mainLayout->addWidget(btnDeleteObj,   2, 0);
-    mainLayout->addWidget(btnClearCanvas, 2, 3);
+    mainLayout->addWidget(lblPrimModes,   3, 2, Qt::AlignRight);
+    mainLayout->addWidget(cobPrimModes,   3, 3);
+    //  mainLayout->addWidget(btnDeleteObj,   2, 0);
+    mainLayout->addWidget(btnClearCanvas, 4, 3);
+    mainLayout->addWidget(cbOutline,      5, 2);
+    mainLayout->addWidget(btnChangeCol,   5, 3);
+
 
     // add layout to this widget instance
     setLayout(mainLayout);
@@ -68,8 +69,7 @@ Paint::Paint(QWidget *parent)
             this, SLOT(showOutlineOnly(bool)));
 
 
-    // Create a QGroupBox for the radio buttons
-    QGroupBox *groupBox = new QGroupBox("Interaction Modes");
+    QGroupBox *groupBox = new QGroupBox("Selection Tools");
     QVBoxLayout *vbox = new QVBoxLayout;
 
     QRadioButton *button1 = new QRadioButton("Create");
@@ -91,10 +91,10 @@ Paint::Paint(QWidget *parent)
     buttonGroup->addButton(button4, TRAFO);
 
     QObject::connect(buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked),
-                        [this](int id){ this->viewport->setInteractionMode(id); });
+                     [this](int id){ this->viewport->setInteractionMode(id); });
 
     // Add the group box to the layout
-    mainLayout->addWidget(groupBox, 3, 0, 1, 4);
+    mainLayout->addWidget(groupBox, 5, 0, 2, 2);
 }
 
 /** d'tor */

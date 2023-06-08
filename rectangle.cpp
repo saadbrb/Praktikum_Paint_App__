@@ -11,7 +11,7 @@ void Rectangle::malen(QPainter* objkt) {
 
     objkt->setPen(QPen(color,2,Qt::SolidLine));
     //einfach if(innenMAl) erstzen, wurde dann nciht wegen color mode innen gemalt
-    if(innenMAl || mussGemalt){
+    if(innenMAl){
         objkt->setBrush(color);
     } else{
         objkt->setBrush(Qt::NoBrush);
@@ -22,13 +22,13 @@ void Rectangle::malen(QPainter* objkt) {
 
 }
 
-void Rectangle::setColor(QColor color_) {
+void Rectangle::setColor(QColor color_, bool innenMAl_) {
     color = color_;
-    mussGemalt = true;
-
+    innenMAl = innenMAl_;
 }
+
 void Rectangle::addPunkt(QPoint punkt) {
-    //some code
+    //Kein Code erforderlich
 }
 void Rectangle::remov(QPoint punkt) {
     QPoint tpr;

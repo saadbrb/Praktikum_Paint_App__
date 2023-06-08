@@ -7,17 +7,16 @@
 #include<vector>
 #include"graphobj.h"
 
-class GraphObj;
+
 
 class Scene {
-private:
-    std::vector<GraphObj*> objketen;
+
 
 public:
     void addObjkt(GraphObj* objkt);
     void alleMalne(QPainter* objkt);
     void deleteAllObjkts();
-    void setInnenColor(QPoint punkt, QColor color);
+    void setInnenColor(QPoint punkt, QColor color, bool innenFrage);
     void deleteItem(QPoint punkt);
     int isSelectes(QPoint punkt);
     void setPosition(QPoint punkt, int i);
@@ -28,6 +27,8 @@ public:
             }
 
     }
+private:
+    std::vector<GraphObj*> objketen;
 
 };
 

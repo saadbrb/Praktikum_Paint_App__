@@ -15,35 +15,10 @@ Canvas::Canvas(QWidget *parent)
     dragging = false;
     innenFrage = true;
     objkt = nullptr;
-    createRadioButtons();
     polyObjkt = nullptr;
+    trglObjkt = nullptr;
 
 
-}
-void Canvas::createRadioButtons()
-{
-    buttonGroup = new QButtonGroup(this);
-    groupBox = new QGroupBox(tr("Interaction Mode"));
-
-    QRadioButton *creatButton = new QRadioButton(tr("Creat"));
-    QRadioButton *delButton = new QRadioButton(tr("Del"));
-    QRadioButton *colButton = new QRadioButton(tr("Col"));
-    QRadioButton *trafoButton = new QRadioButton(tr("Trafo"));
-
-    buttonGroup->addButton(creatButton, CREAT);
-    buttonGroup->addButton(delButton, DEL);
-    buttonGroup->addButton(colButton, COL);
-    buttonGroup->addButton(trafoButton, TRAFO);
-
-    QVBoxLayout *vbox = new QVBoxLayout;
-    vbox->addWidget(creatButton);
-    vbox->addWidget(delButton);
-    vbox->addWidget(colButton);
-    vbox->addWidget(trafoButton);
-    vbox->addStretch(1);
-    groupBox->setLayout(vbox);
-
-    connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(interactionModeChanged(int)));
 }
 
 
@@ -85,28 +60,6 @@ void Canvas::setColor(QColor color_)
     color = color_;
 }
 
-void Canvas::interactionModeChanged(int id)
-{
-    // Wechseln Sie den Interaktionsmodus entsprechend der Auswahl des Benutzers
-    switch(id) {
-    case CREAT:
-        // Code für den Erstellungsmodus
-        setPrimitiveMode(CREAT);
-        break;
-    case DEL:
-        // Code für den Löschmodus
-        setPrimitiveMode(DEL);
-        break;
-    case COL:
-        // Code für den Farbänderungsmodus
-        setPrimitiveMode(COL);
-        break;
-    case TRAFO:
-        // Code für den Transformationsmodus
-        setPrimitiveMode(TRAFO);
-        break;
-    }
-}
 
 
 void Canvas::paintEvent(QPaintEvent *event)
@@ -157,11 +110,47 @@ void Canvas::paintEvent(QPaintEvent *event)
                 polyObjkt->malen(&painter);
 
             }
+            else if(type == TRIANGLE && trglObjkt == nullptr){
+                trglObjkt = new  Triangle(color,innenFrage, firstPunkt, lastPunkt);
+                counter = 0;
+                trglObjkt->malen(&painter);
+
+            }
+
+            else if(type == TRIANGLE && trglObjkt != nullptr){
+
+                trglObjkt->malen(&painter);
+
+            }
 
 
         }
-        if((!dragging && objkt != nullptr) || (!dragging && polyObjkt != nullptr)){
-            if(polyObjkt != nullptr){
+        if((!dragging && objkt != nullptr) || (!dragging && polyObjkt != nullptr) || (!dragging && trglObjkt != nullptr)){
+
+            if(trglObjkt != nullptr){
+
+                if( counter == 0){
+
+                    trglObjkt->addPunkt(lastPunkt);
+
+                    trglObjkt->malen(&painter);
+                    counter++;
+
+                }
+                else if (counter == 1) {
+
+                    trglObjkt->addPunkt(lastPunkt);
+
+                    trglObjkt->malen(&painter);
+                    scene.addObjkt(trglObjkt);
+                    trglObjkt = nullptr;
+                    counter = 0;
+                    painter.end();
+
+
+                }
+            }
+            else if(polyObjkt != nullptr){
 
                 if( polyObjkt->isNear(lastPunkt)){
                     polyObjkt->addPunkt(lastPunkt);
@@ -177,7 +166,7 @@ void Canvas::paintEvent(QPaintEvent *event)
                 }
             }
 
-            if(objkt != nullptr){
+            else if(objkt != nullptr){
                 if(!objkt->isSmall() ){
                     objkt->malen(&painter);
                     scene.addObjkt(objkt);
@@ -192,7 +181,7 @@ void Canvas::paintEvent(QPaintEvent *event)
     else if ( mode == COL) {
         if(checkPress == 1){
 
-            scene.setInnenColor(innenTestPunkt,color);
+            scene.setInnenColor(innenTestPunkt,color,innenFrage);
         }
     }
 

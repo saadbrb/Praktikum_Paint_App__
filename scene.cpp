@@ -55,11 +55,11 @@ int Scene::isSelectes(QPoint punkt){
 
 
 
-void Scene::setInnenColor(QPoint punkt, QColor color){
+void Scene::setInnenColor(QPoint punkt, QColor color, bool innenFrage){
     if(objketen.size() > 0){
         for(size_t i=0; i<objketen.size(); i++){
             if(objketen[i]->insideTest(punkt)){
-                objketen[i]->setColor(color);
+                objketen[i]->setColor(color, innenFrage);
             }
         }
     }
@@ -86,6 +86,7 @@ void Scene::deleteAllObjkts(){
         objketen.clear();
     }
     else {
-        std::cout<<"Es gibt keine Element zum Löschen!\n";
+        std::cout<<"Es gibt keine Element zum Loe"
+                   "schen!\n";
     }
 }

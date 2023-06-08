@@ -2,7 +2,6 @@
 #include "circle.h"
 
 
-
 void Circle::malen(QPainter* objkt) {
 
     double a= abs(getFirstPunkt().rx()-getLastPunkt().rx());
@@ -11,9 +10,8 @@ void Circle::malen(QPainter* objkt) {
     rad = (int) c;
 
     objkt->setPen(QPen(color,2,Qt::SolidLine));
-    //einfach if(innenMAl) erstzen, wurde dann nciht wegen color mode innen gemalt
 
-    if(innenMAl || mussGemalt){
+    if(innenMAl ){
         objkt->setBrush(color);
     } else{
         objkt->setBrush(Qt::NoBrush);
@@ -24,13 +22,13 @@ void Circle::malen(QPainter* objkt) {
 }
 
 
-void Circle::setColor(QColor color_) {
+void Circle::setColor(QColor color_, bool innenMAl_) {
     color = color_;
-    mussGemalt = true;
+    innenMAl = innenMAl_;
 }
 
 void Circle::addPunkt(QPoint punkt) {
-
+    //Kein Code notwendig
 }
 void Circle::remov(QPoint punkt) {
 

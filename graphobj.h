@@ -4,14 +4,10 @@
 #include <iostream>
 #include <QPainter>
 #include <QPainterPath>
+
 class GraphObj {
 
-protected:
-    QColor color;
-    bool innenMAl;
-    QPoint firstPunkt;
-    QPoint lastPunkt;
-    bool mussGemalt = false;
+
 
 
 public:
@@ -35,11 +31,16 @@ public:
     virtual void remov(QPoint startP) = 0;
     virtual bool isSmall() = 0;
     virtual bool insideTest(QPoint punkt) = 0;
-    virtual void setColor(QColor color_) = 0;
+    virtual void setColor(QColor color_, bool innenMAl) = 0;
     QPoint getFirstPunkt();
     QPoint getLastPunkt();
     QColor getColor();
-    void setMussGemalt(bool);
+
+protected:
+    QColor color;
+    bool innenMAl;
+    QPoint firstPunkt;
+    QPoint lastPunkt;
 
 
 

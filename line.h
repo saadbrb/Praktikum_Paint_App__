@@ -13,7 +13,7 @@ public:
     void remov(QPoint punkt) override;
     bool isSmall() override;
     bool insideTest(QPoint punkt) override;
-    void setColor(QColor color_) override;
+    void setColor(QColor color_, bool) override;
 
 
 };

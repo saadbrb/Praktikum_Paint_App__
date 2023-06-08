@@ -1,5 +1,7 @@
 #include "line.h"
 #include<cmath>
+
+
 void Line::malen(QPainter* objkt) {
     objkt->setPen(QPen(color,2,Qt::SolidLine));
 
@@ -8,12 +10,14 @@ void Line::malen(QPainter* objkt) {
 }
 
 
-void Line::setColor(QColor color_) {
+void Line::setColor(QColor color_, bool innenMAl_) {
     color = color_;
-
+    innenMAl = innenMAl_;
 }
+
 void Line::addPunkt(QPoint punkt) {
-    //some code
+    //Kein Code notwendig
+
 }
 void Line::remov(QPoint punkt) {
     QPoint tpr;

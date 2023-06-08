@@ -1,5 +1,6 @@
-#include "polyline.h"
 #include<cmath>
+#include "polyline.h"
+
 
 void Polyline::malen(QPainter* objkt) {
 
@@ -9,11 +10,11 @@ void Polyline::malen(QPainter* objkt) {
 
 
 }
-
-void Polyline::setColor(QColor color_) {
+void Polyline::setColor(QColor color_, bool innenMAl_) {
     color = color_;
-
+    innenMAl = innenMAl_;
 }
+
 void Polyline::addPunkt(QPoint punkt) {
     if(punkten.size() == 1){
         firstPunkt = punkt;

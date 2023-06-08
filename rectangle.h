@@ -7,10 +7,7 @@
 
 class Rectangle : public GraphObj {
 
-private:
-    int with;
-    int height;
-    int x, y;
+
 public:
 
     Rectangle(QColor color_, bool innenMAl_, QPoint firstPunkt_, QPoint lastPunkt_):
@@ -22,8 +19,11 @@ public:
     void remov(QPoint startP) override;
     bool isSmall() override;
     bool insideTest(QPoint punkt) override;
-    void setColor(QColor color_) override;
-
+    void setColor(QColor color_, bool) override;
+private:
+    int with;
+    int height;
+    int x, y;
 
 
 };

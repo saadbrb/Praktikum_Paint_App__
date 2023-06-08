@@ -13,7 +13,8 @@ HEADERS += paint.h \
            polygone.h \
            polyline.h \
            rectangle.h \
-           scene.h
+           scene.h \
+           triangle.h
 SOURCES += paint.cpp \
            canvas.cpp \
            circle.cpp \
@@ -23,4 +24,5 @@ SOURCES += paint.cpp \
            polygone.cpp \
            polyline.cpp \
            rectangle.cpp \
-           scene.cpp
+           scene.cpp \
+           triangle.cpp

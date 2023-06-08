@@ -8,12 +8,13 @@
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include "graphobj.h"
 #include "scene.h"
+#include "triangle.h"
 #include "rectangle.h"
 #include "circle.h"
 #include "line.h"
 #include "polyline.h"
-#include "graphobj.h"
 #include "polygone.h"
 
 class Canvas : public QFrame
@@ -22,7 +23,7 @@ class Canvas : public QFrame
 
 public:
     enum PrimitiveMode {
-        NONE, FREE_HAND, CIRCLE, LINE, TRIANGLE, RECTANGLE, POLYGON
+        NONE, FREE_HAND, CIRCLE, LINE, RECTANGLE, POLYGON, TRIANGLE
     };
 
     enum InteractionMode { CREAT, DEL, COL, TRAFO }; // Hier ist die Aufzählung
@@ -31,6 +32,7 @@ public:
     ~Canvas(){
         delete objkt;
         delete polyObjkt;
+        delete trglObjkt;
     }
 
     QSize minimumSizeHint() const;
@@ -39,10 +41,8 @@ public:
     void clearCanvas();
     void setPrimitiveMode(int mode);
     void setColor(QColor color_);
-    void createRadioButtons();
 
     void setInnenFrage(bool frage);
-    void interactionModeChanged(int id);
     void setInteractionMode(int mode_);
 
 
@@ -66,6 +66,7 @@ private:
     Scene scene;
     GraphObj* objkt;
     Polygone* polyObjkt;
+    Triangle* trglObjkt;
     QButtonGroup *buttonGroup;
     QGroupBox *groupBox;
     InteractionMode mode;
@@ -74,6 +75,7 @@ private:
     QPoint tPunkt;
     bool selected = false;
     int i = -1;
+    int counter = 0;
 
 
 };

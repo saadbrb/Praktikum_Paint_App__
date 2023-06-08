@@ -11,6 +11,3 @@ QColor GraphObj::getColor(){
     return color;
 }
 
-void GraphObj::setMussGemalt(bool frage){
-    mussGemalt = frage;
-}

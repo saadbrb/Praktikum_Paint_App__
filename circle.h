@@ -5,8 +5,6 @@
 
 
 class Circle : public GraphObj {
-private:
-    int rad;
 
 
 public:
@@ -19,7 +17,9 @@ public:
     void remov(QPoint startP) override;
     bool isSmall() override;
     bool insideTest(QPoint punkt) override;
-    void setColor(QColor color_) override;
+    void setColor(QColor color_, bool innenMAl_) override;
+private:
+    int rad;
 
 
 

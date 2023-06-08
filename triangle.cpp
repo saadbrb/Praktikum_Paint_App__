@@ -1,10 +1,12 @@
-#include "polygone.h"
+#include "triangle.h"
 
-void Polygone::malen(QPainter* objkt) {
+void Triangle::malen(QPainter* objkt) {
     objkt->setPen(QPen(color,2,Qt::SolidLine));
 
+    // Erstelle ein QPolygonF Objekt
     QPolygonF polygon;
 
+    //  Punkte zum Polygon hinzuguen
     for (const QPoint& punkt : punkten) {
         polygon << punkt;
     }
@@ -14,22 +16,22 @@ void Polygone::malen(QPainter* objkt) {
         objkt->setBrush(Qt::NoBrush);
     }
 
-    // Zeichnen  des Polygons
     objkt->drawPolygon(polygon);
 
 }
 
-
-void Polygone::setColor(QColor color_, bool innenMAl_) {
+void Triangle::setColor(QColor color_, bool innenMAl_) {
     color = color_;
     innenMAl = innenMAl_;
 }
 
-void Polygone::addPunkt(QPoint punkt) {
+void Triangle::addPunkt(QPoint punkt) {
+
     punkten.push_back(punkt);
 
+
 }
-void Polygone::remov(QPoint punkt) {
+void Triangle::remov(QPoint punkt) {
     QPoint tpr;
     tpr.setX(punkt.rx() - firstPunkt.rx());
     tpr.setY(punkt.ry() - firstPunkt.ry());
@@ -39,15 +41,14 @@ void Polygone::remov(QPoint punkt) {
         p.setY(p.ry() + tpr.ry());
     }
 
-    // Aktualisieren von dem 'firstPunkt' auf die neue Position
     firstPunkt = punkt;
 }
 
-bool Polygone::isSmall() {
+bool Triangle::isSmall() {
     return  true;
 
 }
-bool Polygone::insideTest(QPoint punkt) {
+bool Triangle::insideTest(QPoint punkt) {
     QPolygonF polygon;
     for (const QPoint& punkt : punkten) {
         polygon << punkt;
@@ -56,9 +57,5 @@ bool Polygone::insideTest(QPoint punkt) {
 }
 
 
-bool Polygone::isNear(const QPoint& a) {
-    int dx = a.x() - firstPunkt.rx();
-    int dy = a.y() - firstPunkt.ry();
-    return std::sqrt(dx * dx + dy * dy) <= 10;
-}
+
 
