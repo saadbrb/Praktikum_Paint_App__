@@ -3,17 +3,18 @@
 #include <QFrame>
 #include <QtGui>
 #include <QtCore>
-#include "scene.h"
-#include "rectangle.h"
-#include "circle.h"
-#include "line.h"
-#include "polyline.h"
 #include <QFrame>
 #include <QButtonGroup>
 #include <QGroupBox>
 #include <QRadioButton>
 #include <QVBoxLayout>
+#include "scene.h"
+#include "rectangle.h"
+#include "circle.h"
+#include "line.h"
+#include "polyline.h"
 #include "graphobj.h"
+#include "polygone.h"
 
 class Canvas : public QFrame
 {
@@ -27,7 +28,10 @@ public:
     enum InteractionMode { CREAT, DEL, COL, TRAFO }; // Hier ist die Aufzählung
 
     Canvas(QWidget *parent = 0);
-    ~Canvas();
+    ~Canvas(){
+        delete objkt;
+        delete polyObjkt;
+    }
 
     QSize minimumSizeHint() const;
     QSize sizeHint() const;
@@ -40,6 +44,7 @@ public:
     void setInnenFrage(bool frage);
     void interactionModeChanged(int id);
     void setInteractionMode(int mode_);
+
 
 
 protected:
@@ -60,6 +65,7 @@ private:
     bool innenFrage;
     Scene scene;
     GraphObj* objkt;
+    Polygone* polyObjkt;
     QButtonGroup *buttonGroup;
     QGroupBox *groupBox;
     InteractionMode mode;

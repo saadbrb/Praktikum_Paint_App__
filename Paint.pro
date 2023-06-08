@@ -10,6 +10,7 @@ HEADERS += paint.h \
            circle.h \
            graphobj.h \
            line.h \
+           polygone.h \
            polyline.h \
            rectangle.h \
            scene.h
@@ -19,6 +20,7 @@ SOURCES += paint.cpp \
            graphobj.cpp \
            line.cpp \
            main.cpp \
+           polygone.cpp \
            polyline.cpp \
            rectangle.cpp \
            scene.cpp

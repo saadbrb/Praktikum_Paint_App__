@@ -16,6 +16,7 @@ Canvas::Canvas(QWidget *parent)
     innenFrage = true;
     objkt = nullptr;
     createRadioButtons();
+    polyObjkt = nullptr;
 
 
 }
@@ -44,9 +45,7 @@ void Canvas::createRadioButtons()
 
     connect(buttonGroup, SIGNAL(buttonClicked(int)), this, SLOT(interactionModeChanged(int)));
 }
-Canvas::~Canvas()
-{
-}
+
 
 QSize Canvas::minimumSizeHint() const
 {
@@ -147,16 +146,47 @@ void Canvas::paintEvent(QPaintEvent *event)
                     objkt->malen(&painter);
                 }
             }
+            else if(type == POLYGON && polyObjkt == nullptr){
+                polyObjkt = new  Polygone(color,innenFrage, firstPunkt, lastPunkt);
+
+                polyObjkt->malen(&painter);
+
+            }
+            else if(type == POLYGON && polyObjkt != nullptr){
+
+                polyObjkt->malen(&painter);
+
+            }
 
 
         }
-        if(!dragging && objkt != nullptr ){
-            if(!objkt->isSmall()){
-                objkt->malen(&painter);
-                scene.addObjkt(objkt);
+        if((!dragging && objkt != nullptr) || (!dragging && polyObjkt != nullptr)){
+            if(polyObjkt != nullptr){
+
+                if( polyObjkt->isNear(lastPunkt)){
+                    polyObjkt->addPunkt(lastPunkt);
+                    polyObjkt->malen(&painter);
+                    scene.addObjkt(polyObjkt);
+                    polyObjkt = nullptr;
+                    painter.end();
+
+                }
+                else if (!(polyObjkt->isNear(lastPunkt))) {
+                    polyObjkt->addPunkt(lastPunkt);
+                    polyObjkt->malen(&painter);
+                }
             }
-            objkt = nullptr;
-            painter.end();
+
+            if(objkt != nullptr){
+                if(!objkt->isSmall() ){
+                    objkt->malen(&painter);
+                    scene.addObjkt(objkt);
+                    objkt = nullptr;
+                    painter.end();
+                }
+            }
+
+
         }
     }
     else if ( mode == COL) {
