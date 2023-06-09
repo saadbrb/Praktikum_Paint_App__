@@ -23,15 +23,18 @@ public:
         color(color_) {
 
     }
+    GraphObj(){}
+
     // Verbieten den Kopierkonstruktor und den Zuweisungsoperator
     GraphObj(const GraphObj&) = delete;
     GraphObj& operator=(const GraphObj&) = delete;
-    virtual void malen(QPainter* objkt) = 0 ;
+    virtual void malen(QPainter* objkt, bool) = 0 ;
     virtual void addPunkt(QPoint punkt) = 0;
     virtual void remov(QPoint startP) = 0;
     virtual bool isSmall() = 0;
     virtual bool insideTest(QPoint punkt) = 0;
     virtual void setColor(QColor color_, bool innenMAl) = 0;
+    virtual void calcBBox(QPoint &min, QPoint &max) const = 0;
     QPoint getFirstPunkt();
     QPoint getLastPunkt();
     QColor getColor();
@@ -41,6 +44,7 @@ protected:
     bool innenMAl;
     QPoint firstPunkt;
     QPoint lastPunkt;
+    QPoint min,max;
 
 
 

@@ -2,7 +2,7 @@
 #include "circle.h"
 
 
-void Circle::malen(QPainter* objkt) {
+void Circle::malen(QPainter* objkt, bool frage) {
 
     double a= abs(getFirstPunkt().rx()-getLastPunkt().rx());
     double b = abs(getFirstPunkt().ry()-getLastPunkt().ry());
@@ -16,9 +16,21 @@ void Circle::malen(QPainter* objkt) {
     } else{
         objkt->setBrush(Qt::NoBrush);
     }
-
     objkt->drawEllipse(getFirstPunkt(), rad,rad);
+    if(frage){
+        calcBBox(min, max);
+        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
+        objkt->setBrush(Qt::NoBrush);
+        objkt->drawRect(QRect(min, max));
+    }
 
+
+}
+void Circle::calcBBox(QPoint &min, QPoint &max) const  {
+    min.setX(firstPunkt.x() - rad);
+    min.setY(firstPunkt.y() - rad);
+    max.setX(firstPunkt.x() + rad);
+    max.setY(firstPunkt.y() + rad);
 }
 
 

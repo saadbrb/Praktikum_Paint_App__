@@ -3,7 +3,7 @@
 
 
 
-void Rectangle::malen(QPainter* objkt) {
+void Rectangle::malen(QPainter* objkt, bool frage) {
     x = firstPunkt.rx();
     y = firstPunkt.ry();
     with = lastPunkt.rx()-firstPunkt.rx();
@@ -17,6 +17,12 @@ void Rectangle::malen(QPainter* objkt) {
         objkt->setBrush(Qt::NoBrush);
     }
     objkt->drawRect(x,y,with,height);
+    if(frage){
+        calcBBox(min, max);
+        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
+        objkt->setBrush(Qt::NoBrush);
+        objkt->drawRect(QRect(min, max));
+    }
 
 
 
@@ -42,22 +48,24 @@ void Rectangle::remov(QPoint punkt) {
     lastPunkt.setY(lastPunkt.ry() + tpr.ry());
 }
 bool Rectangle::isSmall() {
-    return (abs(firstPunkt.rx() - lastPunkt.rx()) + abs(firstPunkt.ry()-lastPunkt.ry())) <2;
-
+    int width = abs(firstPunkt.rx() - lastPunkt.rx());
+    int height = abs(firstPunkt.ry() - lastPunkt.ry());
+    return (width < 2) || (height < 2);
 }
 bool Rectangle::insideTest(QPoint punkt){
 
-    QPoint max;
-    QPoint min;
+    int minX = std::min(firstPunkt.x(), lastPunkt.x());
+    int minY = std::min(firstPunkt.y(), lastPunkt.y());
+    int maxX = std::max(firstPunkt.x(), lastPunkt.x());
+    int maxY = std::max(firstPunkt.y(), lastPunkt.y());
 
-    if(firstPunkt.ry() >= lastPunkt.ry()){
-        max = firstPunkt;
-        min = lastPunkt;
-    }
-    else if (lastPunkt.ry() >= firstPunkt.ry() ) {
-        max = lastPunkt;
-        min = firstPunkt;
-    }
-    return min.rx() <= punkt.rx() && min.y() <= punkt.ry() &&
-            punkt.rx() <= max.rx() && punkt.ry() <= max.ry();
+    return (minX <= punkt.x() && punkt.x() <= maxX) &&
+            (minY <= punkt.y() && punkt.y() <= maxY);
+}
+
+void Rectangle::calcBBox(QPoint &min, QPoint &max) const  {
+    min.setX(std::min(firstPunkt.x(), lastPunkt.x()));
+    min.setY(std::min(firstPunkt.y(), lastPunkt.y()));
+    max.setX(std::max(firstPunkt.x(), lastPunkt.x()));
+    max.setY(std::max(firstPunkt.y(), lastPunkt.y()));
 }

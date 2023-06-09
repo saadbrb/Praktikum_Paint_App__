@@ -2,11 +2,16 @@
 #include<cmath>
 
 
-void Line::malen(QPainter* objkt) {
+void Line::malen(QPainter* objkt, bool frage) {
     objkt->setPen(QPen(color,2,Qt::SolidLine));
 
     objkt->drawLine(firstPunkt, lastPunkt);
-
+    if(frage){
+        calcBBox(min, max);
+        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
+        objkt->setBrush(Qt::NoBrush);
+        objkt->drawRect(QRect(min, max));
+    }
 }
 
 
@@ -14,6 +19,18 @@ void Line::setColor(QColor color_, bool innenMAl_) {
     color = color_;
     innenMAl = innenMAl_;
 }
+void Line::calcBBox(QPoint &min, QPoint &max) const  {
+    int minX = std::min(firstPunkt.x(), lastPunkt.x());
+    int minY = std::min(firstPunkt.y(), lastPunkt.y());
+    int maxX = std::max(firstPunkt.x(), lastPunkt.x());
+    int maxY = std::max(firstPunkt.y(), lastPunkt.y());
+
+    min.setX(minX);
+    min.setY(minY);
+    max.setX(maxX);
+    max.setY(maxY);
+}
+
 
 void Line::addPunkt(QPoint punkt) {
     //Kein Code notwendig

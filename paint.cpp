@@ -28,14 +28,16 @@ Paint::Paint(QWidget *parent)
     cobPrimModes->addItem(tr("Polygon"), Canvas::POLYGON);
     cobPrimModes->addItem(tr("Triangle"), Canvas::TRIANGLE);
 
-    lblPrimModes = new QLabel("Primitive Mode");
+    lblPrimModes = new QLabel("Primitive Mode: ");
     lblPrimModes->setBuddy(cobPrimModes);
+
 
     //    btnDeleteObj = new QPushButton("&Delete Selected");
     //    btnDeleteObj->setDisabled(true);
-    btnChangeCol = new QPushButton("C&hange Color");
+    btnChangeCol = new QPushButton("Set Color");
 
     cbOutline = new QCheckBox("Show Only &Outline", this);
+    allBox = new QCheckBox("Show all BBoxes", this);
 
     // create layout and add gui elements to it
     QGridLayout *mainLayout = new QGridLayout;
@@ -43,10 +45,14 @@ Paint::Paint(QWidget *parent)
     mainLayout->addWidget(viewport,       0, 0, 1, 4);
     mainLayout->addWidget(lblPrimModes,   3, 2, Qt::AlignRight);
     mainLayout->addWidget(cobPrimModes,   3, 3);
+    mainLayout->addWidget(cbOutline,      4, 2);
+    mainLayout->addWidget(btnChangeCol,   4, 3);
+    mainLayout->addWidget(allBox,      5, 2);
     //  mainLayout->addWidget(btnDeleteObj,   2, 0);
-    mainLayout->addWidget(btnClearCanvas, 4, 3);
-    mainLayout->addWidget(cbOutline,      5, 2);
-    mainLayout->addWidget(btnChangeCol,   5, 3);
+    mainLayout->addWidget(btnClearCanvas, 5, 3);
+
+
+
 
 
     // add layout to this widget instance
@@ -67,15 +73,16 @@ Paint::Paint(QWidget *parent)
     // connect checkbox to toggle outline event handler
     connect(cbOutline, SIGNAL(toggled(bool)),
             this, SLOT(showOutlineOnly(bool)));
-
+    connect(allBox, SIGNAL(toggled(bool)),
+            this, SLOT(showAllBBoxes(bool)));
 
     QGroupBox *groupBox = new QGroupBox("Selection Tools");
     QVBoxLayout *vbox = new QVBoxLayout;
 
-    QRadioButton *button1 = new QRadioButton("Create");
-    QRadioButton *button2 = new QRadioButton("Delete");
-    QRadioButton *button3 = new QRadioButton("Color");
-    QRadioButton *button4 = new QRadioButton("Transform");
+    QRadioButton *button1 = new QRadioButton("Create objects");
+    QRadioButton *button2 = new QRadioButton("Delete selected");
+    QRadioButton *button3 = new QRadioButton("Change color");
+    QRadioButton *button4 = new QRadioButton("Move object");
 
     vbox->addWidget(button1);
     vbox->addWidget(button2);
@@ -93,8 +100,9 @@ Paint::Paint(QWidget *parent)
     QObject::connect(buttonGroup, QOverload<int>::of(&QButtonGroup::buttonClicked),
                      [this](int id){ this->viewport->setInteractionMode(id); });
 
+
     // Add the group box to the layout
-    mainLayout->addWidget(groupBox, 5, 0, 2, 2);
+    mainLayout->addWidget(groupBox, 3, 0, 3, 2);
 }
 
 /** d'tor */
@@ -131,8 +139,12 @@ void Paint::colorBtnPressed()
 void Paint::showOutlineOnly(bool outline)
 {
     qDebug() << "Only show outline: " << outline;
-    //viewport->setFillMode(!outline);
     viewport->setInnenFrage(!outline);
+}
+void Paint::showAllBBoxes(bool box)
+{
+    qDebug() << "Show All BBoxes: " << box;
+    viewport->setAllBox(box);
 }
 
 void Paint::primModeChanged()

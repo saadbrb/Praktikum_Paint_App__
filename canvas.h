@@ -43,6 +43,7 @@ public:
     void setColor(QColor color_);
 
     void setInnenFrage(bool frage);
+    void setAllBox(bool);
     void setInteractionMode(int mode_);
 
 
@@ -51,6 +52,7 @@ protected:
     void paintEvent(QPaintEvent *event);
     void resizeEvent(QResizeEvent *event);
 
+
     void mousePressEvent(QMouseEvent *event);
     void mouseMoveEvent(QMouseEvent *event);
     void mouseReleaseEvent(QMouseEvent *event);
@@ -58,6 +60,7 @@ protected:
 
 private:
     bool dragging;
+    bool allBox;
     PrimitiveMode type;
     QColor color;
     QPoint firstPunkt;

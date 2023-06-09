@@ -1,14 +1,16 @@
-#ifndef LINE_H
-#define LINE_H
-#include "graphobj.h"
+#ifndef BBOXDECORATOR_H
+#define BBOXDECORATOR_H
+#include <graphobj.h>
 
-class Line :  public GraphObj
+class BBoxDecorator : public GraphObj
 {
+private:
+
+    GraphObj* decoratedObj;
 
 public:
-    Line(QColor color_, QPoint firstPunkt_, QPoint lastPunkt_):
-        GraphObj(color_, firstPunkt_, lastPunkt_){}
-    void malen(QPainter* objkt,bool) override ;
+    BBoxDecorator(GraphObj* obj) : decoratedObj(obj) {}
+    void malen(QPainter* objkt, bool) override ;
     void addPunkt(QPoint punkt) override;
     void remov(QPoint punkt) override;
     bool isSmall() override;
@@ -16,7 +18,6 @@ public:
     void setColor(QColor color_, bool) override;
     void calcBBox(QPoint &min, QPoint &max) const override;
 
-
 };
 
-#endif // LINE_H
+#endif // BBOXDECORATOR_H

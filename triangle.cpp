@@ -1,12 +1,10 @@
 #include "triangle.h"
 
-void Triangle::malen(QPainter* objkt) {
+void Triangle::malen(QPainter* objkt, bool frage) {
     objkt->setPen(QPen(color,2,Qt::SolidLine));
 
-    // Erstelle ein QPolygonF Objekt
     QPolygonF polygon;
 
-    //  Punkte zum Polygon hinzuguen
     for (const QPoint& punkt : punkten) {
         polygon << punkt;
     }
@@ -16,8 +14,14 @@ void Triangle::malen(QPainter* objkt) {
         objkt->setBrush(Qt::NoBrush);
     }
 
+    // Zeichnen  des Polygons
     objkt->drawPolygon(polygon);
-
+    if(frage){
+        calcBBox(min, max);
+        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
+        objkt->setBrush(Qt::NoBrush);
+        objkt->drawRect(QRect(min, max));
+    }
 }
 
 void Triangle::setColor(QColor color_, bool innenMAl_) {
@@ -57,5 +61,22 @@ bool Triangle::insideTest(QPoint punkt) {
 }
 
 
+void Triangle::calcBBox(QPoint &min, QPoint &max) const  {
+    int minX = punkten[0].x(), minY = punkten[0].y();
+    int maxX = minX, maxY = minY;
+
+    for (const QPoint &p : punkten) {
+        minX = std::min(minX, p.x());
+        minY = std::min(minY, p.y());
+        maxX = std::max(maxX, p.x());
+        maxY = std::max(maxY, p.y());
+    }
+
+    min.setX(minX);
+    min.setY(minY);
+    max.setX(maxX);
+    max.setY(maxY);
+
+}
 
 

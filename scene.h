@@ -6,7 +6,7 @@
 #include<iostream>
 #include<vector>
 #include"graphobj.h"
-
+#include "bboxdecorator.h"
 
 
 class Scene {
@@ -18,17 +18,30 @@ public:
     void deleteAllObjkts();
     void setInnenColor(QPoint punkt, QColor color, bool innenFrage);
     void deleteItem(QPoint punkt);
-    int isSelectes(QPoint punkt);
+    int  isSelectes(QPoint punkt);
     void setPosition(QPoint punkt, int i);
+    void setSchowbox(bool);
+    Scene(){
+        objkt = nullptr;
+        isSchowBox = false;
+
+    }
     ~ Scene(){
         if(objketen.size() > 0)
             for(size_t i=0; i<objketen.size(); i++){
                 delete objketen[i];
             }
+        if(box.size() > 0)
+            for(size_t i=0; i<box.size(); i++){
+                delete box[i];
+            }
 
     }
 private:
     std::vector<GraphObj*> objketen;
+    BBoxDecorator* objkt;
+    std::vector<BBoxDecorator*>box;
+    bool isSchowBox;
 
 };
 

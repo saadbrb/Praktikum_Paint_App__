@@ -22,6 +22,7 @@ private slots:
     void colorBtnPressed();
     void primModeChanged();
     void showOutlineOnly(bool);
+    void showAllBBoxes(bool);
 
 private:
     Canvas *viewport;
@@ -32,6 +33,7 @@ private:
     QPushButton *btnDeleteObj;
     QPushButton *btnChangeCol;
     QCheckBox *cbOutline;
+    QCheckBox *allBox;
 };
 
 #endif // PAINT_H

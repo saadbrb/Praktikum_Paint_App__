@@ -17,6 +17,7 @@ Canvas::Canvas(QWidget *parent)
     objkt = nullptr;
     polyObjkt = nullptr;
     trglObjkt = nullptr;
+    allBox = false;
 
 
 }
@@ -33,6 +34,14 @@ QSize Canvas::sizeHint() const
 }
 void Canvas::setInnenFrage(bool frage){
     innenFrage = frage;
+
+
+}
+void Canvas::setAllBox(bool frage){
+    allBox = frage;
+    scene.setSchowbox(allBox);
+
+
 }
 
 
@@ -72,54 +81,55 @@ void Canvas::paintEvent(QPaintEvent *event)
     painter.fillRect(QRect(1, 1, width() - 2, height() - 2), Qt::white);
     scene.alleMalne(&painter);
 
+
     if( mode == CREAT){
         if(dragging){
             if(type == FREE_HAND){
 
                 objkt->addPunkt(lastPunkt);
-                objkt->malen(&painter);
+                objkt->malen(&painter,allBox);
 
             }
             else if(type == CIRCLE){
                 objkt = new Circle(color, innenFrage, firstPunkt, lastPunkt);
-                objkt->malen(&painter);
+                objkt->malen(&painter,allBox);
                 if(!objkt->isSmall()){
-                    objkt->malen(&painter);
+                    objkt->malen(&painter,allBox);
                 }
             }
             else if(type == RECTANGLE){
                 objkt = new class Rectangle(color, innenFrage, firstPunkt, lastPunkt);
                 if(!objkt->isSmall()){
-                    objkt->malen(&painter);
+                    objkt->malen(&painter,allBox);
                 }
             }
             else if(type == LINE){
                 objkt = new Line(color, firstPunkt, lastPunkt);
                 if(!objkt->isSmall()){
-                    objkt->malen(&painter);
+                    objkt->malen(&painter,allBox);
                 }
             }
             else if(type == POLYGON && polyObjkt == nullptr){
                 polyObjkt = new  Polygone(color,innenFrage, firstPunkt, lastPunkt);
 
-                polyObjkt->malen(&painter);
+                polyObjkt->malen(&painter,allBox);
 
             }
             else if(type == POLYGON && polyObjkt != nullptr){
 
-                polyObjkt->malen(&painter);
+                polyObjkt->malen(&painter,allBox);
 
             }
             else if(type == TRIANGLE && trglObjkt == nullptr){
                 trglObjkt = new  Triangle(color,innenFrage, firstPunkt, lastPunkt);
                 counter = 0;
-                trglObjkt->malen(&painter);
+                trglObjkt->malen(&painter,allBox);
 
             }
 
             else if(type == TRIANGLE && trglObjkt != nullptr){
 
-                trglObjkt->malen(&painter);
+                trglObjkt->malen(&painter,allBox);
 
             }
 
@@ -133,7 +143,7 @@ void Canvas::paintEvent(QPaintEvent *event)
 
                     trglObjkt->addPunkt(lastPunkt);
 
-                    trglObjkt->malen(&painter);
+                    trglObjkt->malen(&painter,allBox);
                     counter++;
 
                 }
@@ -141,7 +151,7 @@ void Canvas::paintEvent(QPaintEvent *event)
 
                     trglObjkt->addPunkt(lastPunkt);
 
-                    trglObjkt->malen(&painter);
+                    trglObjkt->malen(&painter,allBox);
                     scene.addObjkt(trglObjkt);
                     trglObjkt = nullptr;
                     counter = 0;
@@ -154,7 +164,7 @@ void Canvas::paintEvent(QPaintEvent *event)
 
                 if( polyObjkt->isNear(lastPunkt)){
                     polyObjkt->addPunkt(lastPunkt);
-                    polyObjkt->malen(&painter);
+                    polyObjkt->malen(&painter,allBox);
                     scene.addObjkt(polyObjkt);
                     polyObjkt = nullptr;
                     painter.end();
@@ -162,13 +172,13 @@ void Canvas::paintEvent(QPaintEvent *event)
                 }
                 else if (!(polyObjkt->isNear(lastPunkt))) {
                     polyObjkt->addPunkt(lastPunkt);
-                    polyObjkt->malen(&painter);
+                    polyObjkt->malen(&painter,allBox);
                 }
             }
 
             else if(objkt != nullptr){
                 if(!objkt->isSmall() ){
-                    objkt->malen(&painter);
+                    objkt->malen(&painter,allBox);
                     scene.addObjkt(objkt);
                     objkt = nullptr;
                     painter.end();
@@ -207,6 +217,7 @@ void Canvas::paintEvent(QPaintEvent *event)
             i = -1;
         }
     }
+
 
 
 }
