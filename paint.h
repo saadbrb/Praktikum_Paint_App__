@@ -23,6 +23,8 @@ private slots:
     void primModeChanged();
     void showOutlineOnly(bool);
     void showAllBBoxes(bool);
+    void saveImage();
+    void quitApplication();
 
 private:
     Canvas *viewport;
@@ -30,7 +32,7 @@ private:
     QPushButton *btnClearCanvas;
     QComboBox *cobPrimModes;
     QLabel *lblPrimModes;
-    QPushButton *btnDeleteObj;
+    //QPushButton *btnDeleteObj;
     QPushButton *btnChangeCol;
     QCheckBox *cbOutline;
     QCheckBox *allBox;

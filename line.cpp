@@ -2,16 +2,11 @@
 #include<cmath>
 
 
-void Line::malen(QPainter* objkt, bool frage) {
+void Line::malen(QPainter* objkt, bool deko_) {
     objkt->setPen(QPen(color,2,Qt::SolidLine));
 
     objkt->drawLine(firstPunkt, lastPunkt);
-    if(frage){
-        calcBBox(min, max);
-        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
-        objkt->setBrush(Qt::NoBrush);
-        objkt->drawRect(QRect(min, max));
-    }
+
 }
 
 

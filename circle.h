@@ -12,7 +12,7 @@ public:
         GraphObj(color_, innenMAl_, firstPunkt_, lastPunkt_){
 
     }
-    void malen(QPainter* objkt, bool) override ;
+    void malen(QPainter* objkt, bool  deko_ = false) override ;
     void addPunkt(QPoint punkt) override;
     void remov(QPoint startP) override;
     bool isSmall() override;

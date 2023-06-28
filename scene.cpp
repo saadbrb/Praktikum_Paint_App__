@@ -1,10 +1,8 @@
 #include "scene.h"
 
 void Scene::addObjkt(GraphObj* objkt_){
-    objketen.push_back(objkt_);
-    objkt = new BBoxDecorator(objkt_);
-    box.push_back(objkt);
-    objkt = nullptr;
+
+    objketen.push_back(new BBoxDecorator(objkt_, isSchowBox));
     std::cout<<"Objekt wurde erfolgreich reingefuegt!\n";
     QPoint a;
     a=objkt_->getFirstPunkt();
@@ -24,17 +22,14 @@ void Scene::deleteItem(QPoint punkt) {
     // Durch die Liste gehen und prüfen, ob der Punkt in einem Objekt liegt
     for (int i = 0; i < objketen.size(); ++i) {
         if (objketen[i]->insideTest(punkt)) {
+            std::cout<<"Es gibt jetzt size : "<<objketen.size()<<"\n";
             // Wenn der Punkt innerhalb des Objekts liegt, das Objekt löschen
             delete objketen[i]; // Zuerst Speicher freigeben
             objketen.erase(objketen.begin() + i); // Dann das Element aus der Liste entfernen
 
-            // Das entsprechende Element in der Box-Liste löschen
-            if (i < box.size()) {
-                delete box[i]; // Zuerst Speicher freigeben
-                box.erase(box.begin() + i); // Dann das Element aus der Liste entfernen
-            }
-            // Sobald wir ein Objekt gefunden und gelöscht haben, die Schleife verlassen
-            break;
+            std::cout<<"Es gibt jetzt size : "<<objketen.size()<<"\n";
+
+            return;
         }
     }
 }
@@ -80,12 +75,10 @@ void Scene::setInnenColor(QPoint punkt, QColor color, bool innenFrage){
 
 }
 
-void Scene::alleMalne(QPainter* objkt){
+void Scene::alleMalne(QPainter* objkt, bool ischoBox){
     if(objketen.size() > 0){
         for(size_t i=0; i<objketen.size(); i++){
             objketen[i]->malen(objkt, isSchowBox);
-            box[i]->malen(objkt, isSchowBox);
-
         }
 
 
@@ -102,15 +95,7 @@ void Scene::deleteAllObjkts(){
     else {
         std::cout<<"Es gibt keine Element zum Loeschen!\n";
     }
-    if(box.size() > 0){
-        for(size_t i=0; i<box.size(); i++){
-            delete box[i];
-        }
-        box.clear();
-    }
-    else {
-        std::cout<<"Es gibt keine Element zum Loeschen!\n";
-    }
+
 }
 
 void Scene::setSchowbox(bool frage){

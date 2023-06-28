@@ -40,9 +40,11 @@ void Canvas::setInnenFrage(bool frage){
 void Canvas::setAllBox(bool frage){
     allBox = frage;
     scene.setSchowbox(allBox);
+    update();
 
 
 }
+
 
 
 void Canvas::clearCanvas()
@@ -79,7 +81,7 @@ void Canvas::paintEvent(QPaintEvent *event)
 
     // white background (inside parent's border)
     painter.fillRect(QRect(1, 1, width() - 2, height() - 2), Qt::white);
-    scene.alleMalne(&painter);
+    scene.alleMalne(&painter, allBox);
 
 
     if( mode == CREAT){
@@ -217,6 +219,11 @@ void Canvas::paintEvent(QPaintEvent *event)
             i = -1;
         }
     }
+    if(!counter){
+       update();
+    }
+
+
 
 
 

@@ -3,7 +3,7 @@
 
 
 
-void Rectangle::malen(QPainter* objkt, bool frage) {
+void Rectangle::malen(QPainter* objkt, bool deko) {
     x = firstPunkt.rx();
     y = firstPunkt.ry();
     with = lastPunkt.rx()-firstPunkt.rx();
@@ -17,12 +17,6 @@ void Rectangle::malen(QPainter* objkt, bool frage) {
         objkt->setBrush(Qt::NoBrush);
     }
     objkt->drawRect(x,y,with,height);
-    if(frage){
-        calcBBox(min, max);
-        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
-        objkt->setBrush(Qt::NoBrush);
-        objkt->drawRect(QRect(min, max));
-    }
 
 
 

@@ -8,7 +8,7 @@ class Line :  public GraphObj
 public:
     Line(QColor color_, QPoint firstPunkt_, QPoint lastPunkt_):
         GraphObj(color_, firstPunkt_, lastPunkt_){}
-    void malen(QPainter* objkt,bool) override ;
+    void malen(QPainter* objkt, bool  deko_ = false) override ;
     void addPunkt(QPoint punkt) override;
     void remov(QPoint punkt) override;
     bool isSmall() override;

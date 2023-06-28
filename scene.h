@@ -14,7 +14,7 @@ class Scene {
 
 public:
     void addObjkt(GraphObj* objkt);
-    void alleMalne(QPainter* objkt);
+    void alleMalne(QPainter* objkt, bool ischoBox);
     void deleteAllObjkts();
     void setInnenColor(QPoint punkt, QColor color, bool innenFrage);
     void deleteItem(QPoint punkt);
@@ -22,7 +22,7 @@ public:
     void setPosition(QPoint punkt, int i);
     void setSchowbox(bool);
     Scene(){
-        objkt = nullptr;
+       // dekObjkt = nullptr;
         isSchowBox = false;
 
     }
@@ -31,16 +31,13 @@ public:
             for(size_t i=0; i<objketen.size(); i++){
                 delete objketen[i];
             }
-        if(box.size() > 0)
-            for(size_t i=0; i<box.size(); i++){
-                delete box[i];
-            }
+
+        //delete dekObjkt;
 
     }
 private:
     std::vector<GraphObj*> objketen;
-    BBoxDecorator* objkt;
-    std::vector<BBoxDecorator*>box;
+   // BBoxDecorator* dekObjkt;
     bool isSchowBox;
 
 };

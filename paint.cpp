@@ -5,8 +5,14 @@
 #include <QGridLayout>
 #include <QCheckBox>
 #include <QDebug>
+#include<QAction>
+#include<QFile>
+#include<QMenu>
+#include<QMenuBar>
+#include<QFileDialog>
 #include "paint.h"
 #include "canvas.h"
+#include "qapplication.h"
 
 enum InteractionMode { CREAT, DEL, COL, TRAFO };
 
@@ -62,8 +68,8 @@ Paint::Paint(QWidget *parent)
     connect(btnClearCanvas, SIGNAL(clicked()),
             this, SLOT(clearBtnPressed()));
     // connect button click event to delete selected object handler
-    connect(btnDeleteObj, SIGNAL(clicked()),
-            this, SLOT(deleteBtnPressed()));
+    //    connect(btnDeleteObj, SIGNAL(clicked()),
+    //            this, SLOT(deleteBtnPressed()));
     // connect button click event to color chooser handler
     connect(btnChangeCol, SIGNAL(clicked()),
             this, SLOT(colorBtnPressed()));
@@ -103,6 +109,18 @@ Paint::Paint(QWidget *parent)
 
     // Add the group box to the layout
     mainLayout->addWidget(groupBox, 3, 0, 3, 2);
+    QAction * save = new QAction ("Save &Image");
+    QAction* quit = new QAction("&Quit");
+    QMenu* fileMenu = new QMenu("File");
+    fileMenu->addAction(save);
+    fileMenu->addAction(quit);
+    QMenuBar* menuBar = new QMenuBar();
+    menuBar->addMenu(fileMenu);
+    mainLayout->setMenuBar(menuBar);
+    connect(save, &QAction::triggered, this, &Paint::saveImage);
+    connect(quit, &QAction::triggered, this, &Paint::quitApplication);
+
+
 }
 
 /** d'tor */
@@ -125,7 +143,31 @@ void Paint::deleteBtnPressed()
     // Implementation requires inside test for all objects for selection
     qDebug() << "Next action: delete selected item (NYI)";
 }
+void Paint::saveImage() {
+    // Größe des Viewports ermitteln
+    QSize viewportSize = viewport->size();
 
+    // QImage-Objekt erstellen
+    QImage image(viewportSize, QImage::Format_RGB32);
+
+    // QPainter-Objekt erstellen, um auf das QImage-Objekt zu zeichnen
+    QPainter painter(&image);
+
+    // Den Inhalt des Viewports in das QImage-Objekt zeichnen
+    viewport->render(&painter);
+
+    // Speichern des Bildes
+    QString fileName = QFileDialog::getSaveFileName(this, tr("Save Image"), "", tr("Images (*.png *.xpm *.jpg)"));
+    if (!fileName.isEmpty())
+    {
+        image.save(fileName);
+    }
+}
+
+void Paint::quitApplication() {
+    // Code zum Beenden der Anwendung...
+    QApplication::quit();
+}
 void Paint::colorBtnPressed()
 {
     QColor color = QColorDialog::getColor(Qt::yellow, this );

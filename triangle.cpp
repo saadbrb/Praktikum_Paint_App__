@@ -1,6 +1,6 @@
 #include "triangle.h"
 
-void Triangle::malen(QPainter* objkt, bool frage) {
+void Triangle::malen(QPainter* objkt, bool deko) {
     objkt->setPen(QPen(color,2,Qt::SolidLine));
 
     QPolygonF polygon;
@@ -16,12 +16,7 @@ void Triangle::malen(QPainter* objkt, bool frage) {
 
     // Zeichnen  des Polygons
     objkt->drawPolygon(polygon);
-    if(frage){
-        calcBBox(min, max);
-        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
-        objkt->setBrush(Qt::NoBrush);
-        objkt->drawRect(QRect(min, max));
-    }
+
 }
 
 void Triangle::setColor(QColor color_, bool innenMAl_) {

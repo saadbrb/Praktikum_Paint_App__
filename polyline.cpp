@@ -2,16 +2,10 @@
 #include "polyline.h"
 
 
-void Polyline::malen(QPainter* objkt, bool frage) {
+void Polyline::malen(QPainter* objkt, bool deko) {
 
     objkt->setPen(QPen(color,2,Qt::SolidLine));
     objkt->drawPolyline(punkten);
-    if(frage){
-        calcBBox(min, max);
-        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
-        objkt->setBrush(Qt::NoBrush);
-        objkt->drawRect(QRect(min, max));
-    }
 
 
 

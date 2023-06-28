@@ -1,6 +1,6 @@
 #include "polygone.h"
 
-void Polygone::malen(QPainter* objkt, bool frage) {
+void Polygone::malen(QPainter* objkt, bool deko) {
     objkt->setPen(QPen(color,2,Qt::SolidLine));
 
     QPolygonF polygon;
@@ -16,12 +16,6 @@ void Polygone::malen(QPainter* objkt, bool frage) {
 
     // Zeichnen  des Polygons
     objkt->drawPolygon(polygon);
-    if(frage){
-        calcBBox(min, max);
-        objkt->setPen(QPen(Qt::red, 2, Qt::DashLine));
-        objkt->setBrush(Qt::NoBrush);
-        objkt->drawRect(QRect(min, max));
-    }
 
 }
 void Polygone::calcBBox(QPoint &min, QPoint &max) const  {

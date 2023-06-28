@@ -9,9 +9,15 @@ class GraphObj {
 
 
 
-
+protected:
+    QColor color;
+    bool innenMAl;
+    QPoint firstPunkt;
+    QPoint lastPunkt;
+    QPoint min,max;
+    bool deko;
 public:
-    GraphObj(QColor color_, bool innenMAl_, QPoint firstPunkt_, QPoint lastPunkt_):
+    GraphObj(QColor color_, bool innenMAl_, QPoint firstPunkt_, QPoint lastPunkt_, bool deko = false):
         color(color_), innenMAl(innenMAl_), firstPunkt(firstPunkt_), lastPunkt(lastPunkt_)  {
 
     }
@@ -23,12 +29,14 @@ public:
         color(color_) {
 
     }
-    GraphObj(){}
+    GraphObj(const GraphObj&);
+    explicit GraphObj(bool deko_ = false ): deko(deko_){}
+
 
     // Verbieten den Kopierkonstruktor und den Zuweisungsoperator
-    GraphObj(const GraphObj&) = delete;
+    // GraphObj(const GraphObj&) = delete;
     GraphObj& operator=(const GraphObj&) = delete;
-    virtual void malen(QPainter* objkt, bool) = 0 ;
+    virtual void malen(QPainter* objkt, bool  deko_ = false) = 0 ;
     virtual void addPunkt(QPoint punkt) = 0;
     virtual void remov(QPoint startP) = 0;
     virtual bool isSmall() = 0;
@@ -38,13 +46,12 @@ public:
     QPoint getFirstPunkt();
     QPoint getLastPunkt();
     QColor getColor();
+    bool ismalrot(){
+        return deko;
+    }
+    virtual ~GraphObj() = default;
 
-protected:
-    QColor color;
-    bool innenMAl;
-    QPoint firstPunkt;
-    QPoint lastPunkt;
-    QPoint min,max;
+
 
 
 
